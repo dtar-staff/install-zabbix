@@ -1,0 +1,61 @@
+---
+
+  - name: INSTALL ZABBIX5 AGENT + GENERATE CONF
+    hosts: all
+    become: true
+    tasks:
+
+    - name: REMOVE ALL PREVIOUS ZABBIX INSTALLATIONS
+      apt:
+        name: zabbix-agent zabbix-agent2 zabbix-release
+        state: absent
+
+    - name: DOWNLOAD AND INSTALL ZABBIX5 REPO DEB [Ubuntu Bionic]
+      apt:
+        deb: 'https://repo.zabbix.com/zabbix/5.0/ubuntu/pool/main/z/zabbix-release/zabbix-release_5.0-1%2Bbionic_all.deb'
+        state: present
+      when: ansible_distribution_release == "bionic"
+
+    - name: DOWNLOAD AND INSTALL ZABBIX5 REPO DEB [Ubuntu Focal]
+      apt:
+        deb: 'https://repo.zabbix.com/zabbix/5.0/ubuntu/pool/main/z/zabbix-release/zabbix-release_5.0-1%2Bfocal_all.deb'
+        state: present
+      when: ansible_distribution_release == "focal"
+
+
+
+    - name: UPDATE REPO CACHE
+      command:
+        cmd: 'apt update'
+
+    - name: INSTALL ZABBIX5 agent
+      apt:
+        name: zabbix-agent
+        state: latest
+
+    - name: GENERATE ZABBIX5 AGENT CONFIGURATION [Hostname]
+      lineinfile:
+        path: /etc/zabbix/zabbix_agentd.conf
+        regexp: '^Hostname='
+        line: 'Hostname={{ zabbix_hostname }}'
+        state: present
+
+    - name: GENERATE ZABBIX5 AGENT CONFIGURATION [Server]
+      lineinfile:
+        path: /etc/zabbix/zabbix_agentd.conf
+        regexp: '^Server='
+        line: 'Server={{ zabbix_server }}'
+        state: present
+
+    - name: GENERATE ZABBIX5 AGENT CONFIGURATION [ServerActive]
+      lineinfile:
+        path: /etc/zabbix/zabbix_agentd.conf
+        regexp: '^ServerActive='
+        line: 'ServerActive={{ zabbix_server }}'
+        state: present
+
+    - name: RESTART AGENT SERVICE
+      service:
+        name: zabbix-agent
+        state: restarted
+

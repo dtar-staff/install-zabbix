@@ -1,0 +1,2 @@
+Install zabbix agent to target servers. This playbook requires for zabbix server to have the host, created for each target server.
+The setup implies that both agent and server are using default TCP ports.

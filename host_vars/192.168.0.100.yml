@@ -1,0 +1,5 @@
+---
+#hostname to be displayed and used by zabbix server
+zabbix_hostname: My Stupid Server
+#Zabbix server ip address or domain name
+zabbix_server: 192.168.0.110
