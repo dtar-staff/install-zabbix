@@ -1,2 +1,4 @@
-Install zabbix agent to target servers. This playbook requires for zabbix server to have the host, created for each target server.
+Install zabbix agent to target servers. Requires the target server to be ubuntu focal or bionic.
+Zabbix version 5.0 is being installed.
+This playbook requires for zabbix server to have the host, created for each target server.
 The setup implies that both agent and server are using default TCP ports.
